@@ -1,0 +1,325 @@
+<%
+local http = require("luci.http")
+http.prepare_content("text/html; charset=utf-8")
+local baud_rate = {600,1200,2400,4800,9600,14400,19200,38400,57600,115200,230400}
+function pairsByKeys (t, f)
+      local a = {}
+      for n in pairs(t) do table.insert(a, n) end
+      table.sort(a, f)
+      local i = 0      -- iterator variable
+      local iter = function ()   -- iterator function
+        i = i + 1
+        if a[i] == nil then return nil
+        else return a[i], t[a[i]]
+        end
+      end
+      return iter
+end
+
+-%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+    Copyright (C) 2014 Dragino Technology Co., Limited
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+-->
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+  <link rel="stylesheet" type="text/css" href="<%= resource %>/arduino/style.css" />
+  <title>Dragino Yun</title>
+</head>
+<body>
+<div id="container">
+  <div id="header">
+    <div class="wrapper">
+      <h1>Dragino Yun</h1>
+      <div id="logo"><a href="<%= pcdata(controller .. '/webpanel') %>"><img src="<%= resource %>/arduino/logo.png" alt="Dragino Yun"/></a></div>
+    </div>
+  </div>
+  <div id="content">
+    <div class="wrapper divide" id="yun_config">
+      <form id="form1" name="form1" method="post" onsubmit="send_post('<%=pcdata(controller .. "/webpanel/sensor")%>', this);" action="#">
+
+        <div id="error_response" class="hidden">
+          <p class="alert">An error has occurred.</p>
+        </div>
+        <ul>
+          <li>
+            <label class="title">IoT server configuration</label>
+          </li>
+          <li>
+            <label class="desc" for="server">
+              Server Type
+            </label>
+            <div class="input_container">
+                <select id="server" name="server">
+                <% for k, s in pairs(service_available) do %>
+                <option value="<%= s %>"
+                <%if s == server then %>
+                selected="selected"
+                <% end %>
+                ><%= s %></option>
+                <% end %>
+                </select>
+            </div>
+          </li>
+
+          <li id="deviceid_container" <% if server ~= "yeelink" and server ~= "xively" then %>class="hidden"<% end %>>
+            <label id="deviceid_label" class="desc" for="deviceid">
+		<% if server == "xively" then %>Feed ID
+		<% elseif server == "yeelink" then %>Device ID<% end %>
+            </label>
+            <div class="input_container">
+              <input id="deviceid" name="deviceid" type="text" value="<%= deviceid %>" maxlength="255">
+            </div>
+          </li>
+
+	
+          <li id="tenant_container" <% if server ~= "cumulocity" then %>class="hidden"<% end %>>
+            <label class="desc" for="tenant">
+              Tenant
+            </label>
+            <div class="input_container">
+              <input id="tenant" name="tenant" type="text" value="<%= tenant %>" maxlength="255">
+            </div>
+          </li>
+
+         <li id="user_container" <% if server ~= "cumulocity" then %>class="hidden"<% end %>>
+            <label class="desc" for="user">
+              User Name
+            </label>
+            <div class="input_container">
+              <input id="user" name="user" type="text" value="<%= user %>" maxlength="255">
+            </div>
+          </li>
+
+         <li id="pass_container" <% if server ~= "cumulocity" then %>class="hidden"<% end %>>
+            <label class="desc" for="pass">
+              Password
+            </label>
+            <div class="input_container">
+              <input id="pass" name="pass" type="password" value="<%= pass %>" maxlength="63">
+            </div>
+          </li>
+
+         <li id="apikey_container">
+            <label class="desc" for="apikey">
+              Api Key
+            </label>
+            <div class="input_container">
+              <input id="apikey" name="apikey" type="text" value="<%= apikey %>" maxlength="255">
+            </div>
+          </li>
+
+         <li>
+            <label class="desc" for="devicename">
+              Device Name 
+            </label>
+            <div class="input_container">
+              <input id="devicename" name="devicename" type="text" value="<%= devicename %>" maxlength="255">
+            </div>
+         </li>
+
+         <li id="globalid_container" <% if server ~= "cumulocity" then %>class="hidden"<% end %>>
+            <label class="desc" for="globalID">
+              Global ID 
+            </label>
+            <div class="input_container">
+              <input id="apikey" name="globalID" type="text" placeholder="Leave it blank to auto get Global ID from server" value="<%= globalid %>" maxlength="10">
+            </div>
+         </li>
+
+         <li>
+            <label class="desc" for="board">
+              Arduino Board Type 
+            </label>
+            <div class="input_container">
+		<select id="board" name="board">
+		  <% for k,v in pairs(board_type) do%>
+                <option value=<%=v.code%>
+                <%if board == v.code then %>
+                selected="selected"
+                <% end %>
+                ><%=v.label%></option>
+		  <%end%>
+              </select>
+            </div>
+         </li>
+
+         <li>
+            <label class="desc" for="uartmode">
+              Operation Mode 
+            </label>
+            <div class="input_container">
+		<select id="uartmode" name="uartmode">
+		  <% for k,v in pairs(uartmode_list) do%>
+                <option value=<%=v.code%>
+                <%if uartmode == v.code then %>
+                selected="selected"
+                <% end %>
+                ><%=v.label%></option>
+		  <%end%>
+              </select>
+            </div>
+         </li>
+
+        <li id="uartbaud_container" <% if uartmode == "bridge" then %>class="hidden"<% end %> >
+            <label class="desc" for="uartbaud">UART Baud Rate</label>
+            <div class="input_container">
+		<select id="uartbaud" name="uartbaud">
+		  <% for k, r in pairs(baud_rate) do %>
+                <option value="<%= r %>"
+                <%if r == uartbaud then %>
+                selected="selected"
+                <% end %>
+                ><%= r %></option>
+                <% end %>
+            	</select>
+            </div>
+        </li>
+
+        <li>
+            <label class="desc" for="debuglevel">
+              Debug Level
+            </label>
+            <div class="input_container">
+              <select id="debuglevel" name="debuglevel">
+		  <% for k,v in pairs(debug_list) do%>
+                <option value=<%=v.code%>
+                <%if debuglevel == v.code then %>
+                selected="selected"
+                <% end %>
+                ><%=v.label%></option>
+		  <%end%>
+              </select>
+            </div>
+	</li>
+
+      </ul>
+    </div>
+
+    <div class="wrapper divide">
+      <ul>
+	<li><label class="title">Sensor Channels</label></li>
+	<% for port,cell in pairsByKeys(sensor_unit) do%>
+	<li><label class="title">Channel: <%= port %></label></li>
+	<li>
+		<label class="desc">Upload Type</label>
+		<div class="input_container">
+			<select id="port_<%= port %>_uploadtype" name="port_<%= port %>_uploadtype">
+		  		<% for k,v in pairs(uploadtype_list) do%>
+               		<option value=<%=v.code%>
+                		<%if cell.uploadtype == v.code then %>
+               		selected="selected"
+                		<% end %>
+                		><%=v.label%></option>
+		  		<%end%>
+              	</select>						
+            	</div>
+	</li>
+	<li>
+		<label class="desc">Remote ID</label>
+		<div class="input_container">
+              	<input id="port_<%= port %>_id" name="port_<%= port %>_id" type="text" value="<%= cell.remoteid %>" > </input>			
+            	</div>
+	</li>
+	<li>
+		<label class="desc">Upload Pattern</label>
+		<div class="input_container">
+			<input id="port_<%= port %>_pattern" name="port_<%= port %>_pattern" type="text" value="<%= cell.pattern %>" > </input>		
+            	</div>
+	</li>
+	<li>
+		<label class="desc">Remove</label>
+		<div class="input_container">
+			<input id="port_<%= port %>_remove" name="port_<%= port %>_remove" type="checkbox" value="remove"></input>		
+            	</div>
+	</li>
+
+<!--
+	<li>
+		<label class="desc" for="port_<%= port %>_id"><%= port %></label>
+		<div class="input_container">
+			<select id="port_<%= port %>_uploadtype" name="port_<%= port %>_uploadtype">
+		  		<% for k,v in pairs(uploadtype_list) do%>
+               		<option value=<%=v.code%>
+                		<%if cell.uploadtype == v.code then %>
+               		selected="selected"
+                		<% end %>
+                		><%=v.label%></option>
+		  		<%end%>
+              	</select>			
+              	<input id="port_<%= port %>_id" name="port_<%= port %>_id" type="text" value="<%= cell.remoteid %>" > </input>
+			<input id="port_<%= port %>_pattern" name="port_<%= port %>_pattern" type="text" value="<%= cell.pattern %>" > </input>
+			<label>Remove</label> <input id="port_<%= port %>_remove" name="port_<%= port %>_remove" type="checkbox" value="remove">	</input>			
+            	</div>
+	</li>
+-->
+	<%end%>
+      </ul>
+    </div>
+
+    <div class="wrapper divide">
+      <ul> 
+	<li><label class="title">Add New Channel</label></li>
+	<li>
+		<label class="desc" for="new_port_name">Channel Name:</label>
+		<div class="input_container">
+				<input id="new_port_name" name="new_port_name" type="text" placeholder="Name should not include SPACE" value="" > </input>
+		</div>	
+	</li>	
+	<li>
+		<label class="desc" for="new_port_uploadtype">Upload Type:</label>
+		<div class="input_container">		
+			<select id="new_port_uploadtype" name="new_port_uploadtype">
+		  		<% for k,v in pairs(uploadtype_list) do%>
+               		<option value=<%=v.code%>
+                		<%if v.code == "generic" then %>
+               		selected="selected"
+                		<% end %>
+                		><%=v.label%></option>
+		  		<%end%>
+              	</select>
+		</div>
+	</li>
+       <li>
+		<label class="desc" for="new_port_remoteid">Remote ID:</label>
+		<div class="input_container">
+			<input id="new_port_remoteid" name="new_port_remoteid" type="text" value="" > </input>
+		</div>
+	</li>
+       <li>
+		<label class="desc" for="new_port_pattern">Upload Pattern:</label>
+		<div class="input_container">
+			<input id="new_port_pattern" name="new_port_pattern" type="text" placeholder="Pattern should not include ' or &quot; " value="" > </input>
+		</div>
+	</li>
+      </ul> 
+    </div>
+
+
+    <div class="wrapper divide">
+      <div class="input_container">
+        <input id="discard" class="btTxt submit saveForm btn" type="reset" value="Discard">
+        <input id="conf_rest_btn" class="btTxt submit saveForm" type="submit" value="Configure &amp; Restart MCU">
+      </div>
+
+      </form>
+    </div>
+
+  </div>
+  <!-- #content -->
+  <br class="clear"/>
+</div>
+<!-- #container -->
+<script type="text/javascript" charset="utf-8" src="<%= resource %>/arduino/zepto.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="<%= resource %>/dragino/sensorpanel.js"></script>
+</body>
+</html>
