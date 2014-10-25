@@ -28,21 +28,22 @@
 #define DS2_B
 
 #define DS_GPIO_LED_WLAN		0
-#define DS_GPIO_LED_USB			1
+#define DS_GPIO_LED_USB			28
 
-#define DS_GPIO_OE			21
-#define DS_GPIO_AVR_RESET		18
+#define DS_GPIO_OE			19
+#define DS_GPIO_AVR_RESET		20
 
 // Maintained to have the console in the previous version of DS2 working
 #define DS_GPIO_AVR_RESET_DS2           7
 #define DS2_PREV_RESET_PIN
 
 #ifdef DS1
-#define DS_GPIO_OE2			23
+#define DS_GPIO_OE2			26
 #else
-#define DS_GPIO_OE2                     22
-#define DS_GPIO_UART_ENA		23
-#define DS_GPIO_CONF_BTN		20
+#define DS_GPIO_27                     27
+#define DS_GPIO_26                     26
+#define DS_GPIO_UART_ENA		24
+#define DS_GPIO_CONF_BTN		11
 #endif
 
 #define DS_KEYS_POLL_INTERVAL		20	/* msecs */
@@ -82,11 +83,11 @@ static struct gpio_keys_button ds_gpio_keys[] __initdata = {
 
 static void __init ds_common_setup(void)
 {
-	static u8 mac[6];
+	//static u8 mac[6];
 
 	u8 *art = (u8 *) KSEG1ADDR(0x1fff0000);
 	ath79_register_m25p80(NULL);
-#if 0
+#if 1
 	ath79_register_wmac(art + DS_CALDATA_OFFSET,
 			    art + DS_WMAC_MAC_OFFSET);
 
@@ -164,15 +165,21 @@ static void __init ds_setup(void)
 		printk("Error setting GPIO OE2\n");
 #else
         if (gpio_request_one(DS_GPIO_UART_ENA,
-                 GPIOF_OUT_INIT_LOW | GPIOF_EXPORT_DIR_FIXED,
+                 GPIOF_OUT_INIT_HIGH | GPIOF_EXPORT_DIR_FIXED,
                  "UART-ENA") != 0)
                 printk("Error setting GPIO Uart Enable\n");
         
-	// enable OE of level shifter
-        if (gpio_request_one(DS_GPIO_OE2,
+	// export GPIO27
+        if (gpio_request_one(DS_GPIO_27,
                  GPIOF_OUT_INIT_LOW | GPIOF_EXPORT_DIR_FIXED,
-                 "OE-2") != 0)
-                printk("Error setting GPIO OE2\n");
+                 "GPIO27") != 0)
+                printk("Error setting GPIO27\n");
+
+	// export GPIO26
+        if (gpio_request_one(DS_GPIO_26,
+                 GPIOF_OUT_INIT_LOW | GPIOF_EXPORT_DIR_FIXED,
+                 "GPIO26") != 0)
+                printk("Error setting GPIO26\n");
 #endif
 }
 

@@ -1,5 +1,5 @@
 src-svn packages https://github.com/arduino/openwrt-packages-yun/trunk
-src-svn xwrt http://x-wrt.googlecode.com/svn/trunk/package
+#src-svn xwrt http://x-wrt.googlecode.com/svn/trunk/package
 src-svn luci http://svn.luci.subsignal.org/luci/branches/luci-0.11/contrib/package
 src-git routing git://github.com/openwrt-routing/packages.git;for-12.09.x
 src-git alljoyn https://git.allseenalliance.org/gerrit/core/openwrt_feed;attitude_adjustment
@@ -9,4 +9,4 @@ src-git alljoyn https://git.allseenalliance.org/gerrit/core/openwrt_feed;attitud
 #src-svn desktop svn://svn.openwrt.org/openwrt/feeds/desktop
 #src-svn xfce svn://svn.openwrt.org/openwrt/feeds/xfce
 #src-svn lxde svn://svn.openwrt.org/openwrt/feeds/lxde
-#src-link custom /usr/src/openwrt/custom-feed
+src-link dragino /home/dragino/work/dragino-yun/dragino-packages
