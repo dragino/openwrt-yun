@@ -3,7 +3,8 @@
 
 USAGE="Usage: . ./build_image.sh oem-application"
 
-OPENWRT_PATH=$(pwd)
+REPO_PATH=$(pwd)
+cd openwrt
 
 APP=common
 
@@ -60,20 +61,20 @@ echo "Run make for ms14"
 make -j8 V=99
 
 echo "Copy Image"
-if [ ! -d image ]
-then
-	mkdir image
-fi
+#if [ ! -d image ]
+#then
+#	mkdir image
+#fi
 
 echo "Set up new directory name with date"
 DATE=`date +%Y%m%d-%H%M`
-mkdir image/$APP-build--v$VERSION--$DATE
-IMAGE_DIR=image/$APP-build--v$VERSION--$DATE
+mkdir -p $REPO_PATH/image/$APP-build--v$VERSION--$DATE
+IMAGE_DIR=$REPO_PATH/image/$APP-build--v$VERSION--$DATE
 
 echo  "Copy files to ./image folder"
-cp ./bin/ar71xx/openwrt-ar71xx-generic-yun-16M-kernel.bin     ./$IMAGE_DIR/dragino2-yun-$APP-v$VERSION-kernel.bin
-cp ./bin/ar71xx/openwrt-ar71xx-generic-yun-16M-rootfs-squashfs.bin   ./$IMAGE_DIR/dragino2-yun-$APP-v$VERSION-rootfs-squashfs.bin
-cp ./bin/ar71xx/openwrt-ar71xx-generic-yun-16M-squashfs-sysupgrade.bin ./$IMAGE_DIR/dragino2-yun-$APP-v$VERSION-squashfs-sysupgrade.bin
+cp ./bin/ar71xx/openwrt-ar71xx-generic-yun-16M-kernel.bin     $IMAGE_DIR/dragino2-yun-$APP-v$VERSION-kernel.bin
+cp ./bin/ar71xx/openwrt-ar71xx-generic-yun-16M-rootfs-squashfs.bin   $IMAGE_DIR/dragino2-yun-$APP-v$VERSION-rootfs-squashfs.bin
+cp ./bin/ar71xx/openwrt-ar71xx-generic-yun-16M-squashfs-sysupgrade.bin $IMAGE_DIR/dragino2-yun-$APP-v$VERSION-squashfs-sysupgrade.bin
 
 
 echo "Update md5sums"

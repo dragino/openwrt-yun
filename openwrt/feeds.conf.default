@@ -9,4 +9,4 @@ src-git alljoyn https://git.allseenalliance.org/gerrit/core/openwrt_feed;attitud
 #src-svn desktop svn://svn.openwrt.org/openwrt/feeds/desktop
 #src-svn xfce svn://svn.openwrt.org/openwrt/feeds/xfce
 #src-svn lxde svn://svn.openwrt.org/openwrt/feeds/lxde
-src-link dragino /home/dragino/work/dragino-yun/dragino-packages
+src-link dragino ../../dragino-packages
