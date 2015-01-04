@@ -7,9 +7,10 @@ REPO_PATH=$(pwd)
 OPENWRT_PATH='openwrt'
 
 
-echo "*** Update the feeds (See ./feeds-update.log)"
+echo "*** Update the feeds, update result please see feed_update.log"
+echo "*** Update process may take several minutes"
 sleep 2
-$OPENWRT_PATH/scripts/feeds update
+$OPENWRT_PATH/scripts/feeds update > feeds_update.log
 sleep 2
 echo " "
 
@@ -25,6 +26,4 @@ echo "*** Download dl source"
 git clone https://github.com/dragino/Dragino2_dl_bak.git dl
 mv dl/dl $OPENWRT_PATH
 echo " "
-
-
 echo "End of script"

@@ -47,7 +47,7 @@ if [ -f .config.$APP ];then
 	echo "Find customized .config files"
 	echo "Replace default .config file with .config.$APP"
 	echo ""
-	#cp .config.$APP .config
+	cp .config.$APP .config
 fi
 
 echo ""
