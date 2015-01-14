@@ -3,6 +3,7 @@
 #start up script for Dragino2
 START=99
 UARTMODE=`uci get iot.general.uartmode`
+HOSTNAME=`uci get system.vendor.hostname`
 
 start() {
 	FIRSTBOOT=$(uci get system.@system[0].firstboot)
@@ -56,8 +57,8 @@ load_uart() {
 load_config()
 {
 	 uci set system.@system[0].key=$(hexdump -v -e '1/1 "%.2x"' -s $((0x100)) -n 16 /dev/mtd6)
-        uci set system.@system[0].device=$(hexdump -v -e '1/1 "%.2x"' -s $((0x120)) -n 16 /dev/mtd6)
-        uci set system.@system[0].hostname=dragino2
+     uci set system.@system[0].device=$(hexdump -v -e '1/1 "%.2x"' -s $((0x120)) -n 16 /dev/mtd6)
+     uci set system.@system[0].hostname=$HOSTNAME
 	 echo $(uci get system.@system[0].hostname) > /proc/sys/kernel/hostname
 	 uci set system.@system[0].firstboot='0'
 	 uci commit

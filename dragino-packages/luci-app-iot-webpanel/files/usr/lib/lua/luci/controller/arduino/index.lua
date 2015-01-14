@@ -197,11 +197,13 @@ function index()
   end
 
   -- web panel
-  local webpanel = entry({ "webpanel" }, alias("webpanel", "go_to_homepage"), _("Dragino Web Panel"), 10)
+  local uci = luci.model.uci.cursor()
+  local vendor = uci:get('system','vendor','name')
+  local webpanel = entry({ "webpanel" }, alias("webpanel", "go_to_homepage"), _( vendor .." Web Panel"), 10)
   webpanel.sysauth = "root"
   webpanel.sysauth_authenticator = "arduinoauth"
 
-  make_entry({ "webpanel", "homepage" }, call("homepage"), _("Arduino Web Panel"), 10)
+  make_entry({ "webpanel", "homepage" }, call("homepage"), _(vendor .." Web Panel"), 10)
   make_entry({ "webpanel", "go_to_homepage" }, call("go_to_homepage"), nil)
   make_entry({ "webpanel", "set_password" }, call("go_to_homepage"), nil)
   make_entry({ "webpanel", "config" }, call("config"), nil)
@@ -211,7 +213,6 @@ function index()
   make_entry({ "webpanel", "toogle_rest_api_security" }, call("toogle_rest_api_security"), nil)
 
   --api security level
-  local uci = luci.model.uci.cursor()
   uci:load("arduino")
   local secure_rest_api = uci:get_first("arduino", "arduino", "secure_rest_api")
   local rest_api_sysauth = false

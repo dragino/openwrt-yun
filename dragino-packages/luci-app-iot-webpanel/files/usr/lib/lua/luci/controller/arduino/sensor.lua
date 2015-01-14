@@ -44,7 +44,7 @@ local function config_get()
   local uci = luci.model.uci.cursor()
   uci:load("iot")
   uci:load("arduino")
-  local devicename = uci:get_first("iot","settings","DeviceName") or "DRAGINO-"..mac
+  local devicename = uci:get_first("iot","settings","DeviceName") or uci:get("system.vendor.hostname")..'-'..mac
 
   local debug_list = {}
   debug_list[1] = { code = "0", label = "Disable" }
@@ -148,7 +148,7 @@ local function config_post()
   end
 
   local dn = luci.http.formvalue("devicename")
-  devicename = not_nil_or_empty(dn) and dn or 'DRAGINO-'..mac
+  devicename = not_nil_or_empty(dn) and dn or uci:get("system.vendor.hostname")..'-'..mac
   uci:set("iot", "general", "DeviceName", devicename)
 
   uci:foreach("iot","sensor",

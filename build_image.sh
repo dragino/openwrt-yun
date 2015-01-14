@@ -24,7 +24,7 @@ if [ $1 ]; then
 	fi
 fi
 
-VERSION=2.0.1
+VERSION=2.0.2
 BUILD=$APP-$VERSION
 BUILD_TIME="`date`"
 
@@ -61,11 +61,6 @@ echo "Run make for ms14"
 make -j8 V=99
 
 echo "Copy Image"
-#if [ ! -d image ]
-#then
-#	mkdir image
-#fi
-
 echo "Set up new directory name with date"
 DATE=`date +%Y%m%d-%H%M`
 mkdir -p $REPO_PATH/image/$APP-build--v$VERSION--$DATE
@@ -79,17 +74,6 @@ cp ./bin/ar71xx/openwrt-ar71xx-generic-yun-16M-squashfs-sysupgrade.bin $IMAGE_DI
 
 echo "Update md5sums"
 cat ./bin/ar71xx/md5sums | grep "yun-16M" | awk '{gsub(/openwrt-ar71xx-generic-yun-16M/,"dragino2-yun-'"$APP"'-v'"$VERSION"'")}{print}' >> $IMAGE_DIR/md5sums
-
-
-echo ""
-echo "restore the files and config to common build"
-#rm -rf files
-
-echo ""
-echo "Copy config and files"
-echo ""
-#cp .config.common .config
-#cp -r files-common files
 
 echo ""
 echo "End Dragino2 build"
