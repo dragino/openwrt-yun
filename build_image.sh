@@ -36,7 +36,7 @@ cp -r files-common files
 
 if [ -d files-$APP ];then
 	echo ""
-	echo "Find customized $APP files. Copy $APP files"
+	echo "Find customized $APP files."
 	echo "Copy files-$APP to default files directory"
 	echo ""
 	cp -rf files-$APP/* files

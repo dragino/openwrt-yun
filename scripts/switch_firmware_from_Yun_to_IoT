@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# this script is used to switch firmware from Yun to IoT
+
+echo "Start Flashing, Don't power off the device until it finish !!!"
+
+cp /IoT_firmware* /var/
+
+mtd write /var/IoT_firmware_part1 u-boot-env
+mtd write /var/IoT_firmware_part2 rootfs
+
+sleep 5
+echo "Flashing finish. Reboot the device to boot to IoT firmware. "
+
+reboot
