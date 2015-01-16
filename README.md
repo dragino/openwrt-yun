@@ -5,6 +5,9 @@ Dragino Yun -- A customized Arduino Yún version for Dragino Devices
 This repository is forked from the OpenWrt Yun and add some customized feature to use in Dragino Devices such as:
 [MS14](http://www.dragino.com/products/mother-board.html), [HE](http://www.dragino.com/products/linux-module/item/87-he.html) and [Yun Shield](http://www.dragino.com/products/yunshield.html).
 
+There is another more generic firmware version for IoT,VoIP and Mesh. With the source in [this link](https://github.com/dragino/dragino2/)
+
+Difference between these two firmware can be found [difference between IoT Mesh and Dragino Yun firmware](http://wiki.dragino.com/index.php?title=Firmware_and_Source_Code)
 
 How to compile the image?
 ===============
