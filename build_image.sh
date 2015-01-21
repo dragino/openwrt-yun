@@ -19,6 +19,7 @@ if [ $1 ]; then
 	else
 		echo ''
 		echo 'APP directory or .config are not existing'
+		echo 'Make sure you ahve type the correct app name'
 		echo ''
 		exit 0
 	fi
