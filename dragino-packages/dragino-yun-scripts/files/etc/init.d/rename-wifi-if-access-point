@@ -6,6 +6,7 @@ start() {
 	MODE=`/sbin/uci get wireless.@wifi-iface[0].mode`
 	SSID=`/sbin/uci get wireless.@wifi-iface[0].ssid`
 	SSID_PREFIX=`/sbin/uci get system.vendor.ssid_prefix`
+	[ -z $SSID_PREFIX ] && SSID_PREFIX="Dragino"
 
 	if [ "$MODE" == "ap" -a "$SSID" == "Arduino" ]
 	then

@@ -3,6 +3,12 @@
 local uci = require("luci.model.uci")
 uci = uci.cursor()
 
+local upload_bootloader = uci:get("arduino","mcu","upload_bootloader")
+if upload_bootloader == 'disable' then
+	print("Upload bootloader is disabled, won't add bootloader during upload")
+	return 0
+end
+
 local bootloader_dir='/etc/arduino/'
 local bootloader
 local board = uci:get("arduino","mcu","board")
@@ -19,6 +25,8 @@ elseif board == 'mega2560' then
   bootloader = 'stk500v2/stk500boot_v2_mega2560.hex'
 end
 
+print("")
+print("Bootloader "..bootloader.." will be added to the sketch")
 
 if #arg ~= 1 then
   print("Missing sketch file name")
