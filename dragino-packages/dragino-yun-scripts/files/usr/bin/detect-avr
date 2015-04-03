@@ -121,7 +121,7 @@ elif [ $avr_part == "ATmega328" ]; then
 	profile="duemilanove328"
 elif [ $avr_part == "ATmega168" ]; then
 	profile="duemilanove168"
-elif [ $avr_part == "mega2560" ]; then
+elif [ $avr_part == "ATmega2560" ]; then
 	profile="mega2560"
 fi
 
