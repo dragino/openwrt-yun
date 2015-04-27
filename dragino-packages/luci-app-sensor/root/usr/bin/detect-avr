@@ -96,9 +96,20 @@ sig0x1e8f09="ATtiny5"
 sig0x1e9008="ATtiny9"
 sig0x1e9003="ATtiny10"
 
+
+#Check if GPIO19 is already exported
+if [ -d /sys/class/gpio/gpio19 ]; then
+GPIO19_EXPORTED='YES'
+fi
+
+if [ ! $GPIO19_EXPORTED ]; then
+	echo 19 > /sys/class/gpio/export
+	echo "high" > /sys/class/gpio/gpio19/direction
+fi
+
 echo 1 > /sys/class/gpio/gpio19/value
 
-mkdir /tmp/avr
+[ ! -d /tmp/avr ] && mkdir /tmp/avr
 
 #Get Device signature
 avrdude -c linuxgpio -C /etc/avrdude.conf -p m328p > /tmp/avr/avrdude_info 2>&1
@@ -125,8 +136,12 @@ elif [ $avr_part == "ATmega2560" ]; then
 	profile="mega2560"
 fi
 
-uci set arduino.mcu.avr_part=$avr_part
-uci set arduino.mcu.board=$profile
-uci commit arduino
+uci set sensor.mcu.avr_part=$avr_part
+uci set sensor.mcu.board=$profile
+uci commit sensor
 
 echo 0 > /sys/class/gpio/gpio19/value
+
+if [ ! $GPIO19_EXPORTED ]; then
+	echo 19 > /sys/class/gpio/unexport
+fi

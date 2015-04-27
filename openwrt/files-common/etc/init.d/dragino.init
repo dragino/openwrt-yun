@@ -21,12 +21,8 @@ start() {
 		load_config
 	fi
 
-	ifconfig eth0:9 172.31.255.254 netmask 255.255.255.252
-	/etc/init.d/avahi-daemon restart
-	/usr/bin/detect-avr
-	/usr/bin/reset-mcu
-	load_uart
-	/usr/sbin/link_arduino_www.sh
+	ifconfig eth0:9 172.31.255.254 netmask 255.255.255.252	
+	#load_uart
 }
 
 restart() {
@@ -68,7 +64,7 @@ load_config()
 {
 	 uci set system.@system[0].key=$(hexdump -v -e '1/1 "%.2x"' -s $((0x100)) -n 16 /dev/mtd6)
      uci set system.@system[0].device=$(hexdump -v -e '1/1 "%.2x"' -s $((0x120)) -n 16 /dev/mtd6)
-     uci set system.@system[0].hostname=$HOSTNAME
+     uci set system.@system[0].hostname=$HOSTNAME-$(hexdump -v -e '1/1 "%.2x"' -s $((0x120)) -n 3 /dev/mtd6)
 	 echo $(uci get system.@system[0].hostname) > /proc/sys/kernel/hostname
 	 uci set system.@system[0].firstboot='0'
 	 uci commit

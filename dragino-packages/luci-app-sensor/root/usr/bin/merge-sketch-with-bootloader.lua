@@ -3,7 +3,7 @@
 local uci = require("luci.model.uci")
 uci = uci.cursor()
 
-local upload_bootloader = uci:get("arduino","mcu","upload_bootloader")
+local upload_bootloader = uci:get("sensor","mcu","upload_bootloader")
 if upload_bootloader == 'disable' then
 	print("Upload bootloader is disabled, won't add bootloader during upload")
 	return 0
@@ -11,7 +11,7 @@ end
 
 local bootloader_dir='/etc/arduino/'
 local bootloader
-local board = uci:get("arduino","mcu","board")
+local board = uci:get("sensor","mcu","board")
 
 if board == 'leonardo' then
  bootloader = 'Caterina-Yun.hex' 
