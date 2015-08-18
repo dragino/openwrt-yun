@@ -18,7 +18,7 @@ config led
 	option sysfs 'ds:green:wlan'
 	option trigger 'phy0tpt'
 
-config system 'vendor'
+config oem 'vendor'
 	option name 'Dragino'
 	option ssid_prefix 'Dragino'
 	option hostname 'dragino'
