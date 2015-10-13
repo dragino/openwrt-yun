@@ -2,7 +2,7 @@
 
 #start up script for Dragino2
 START=99
-UARTMODE=`uci get iot.general.uartmode`
+UARTMODE=`uci get sensor.poweruart.uartmode`
 HOSTNAME=`uci get system.vendor.hostname`
 # compatible with old version 1.3.x
 if [ -z $HOSTNAME ]; then
@@ -64,7 +64,7 @@ load_config()
 {
 	uci set system.@system[0].key=$(hexdump -v -e '1/1 "%.2x"' -s $((0x100)) -n 16 /dev/mtd6)
     uci set system.@system[0].device=$(hexdump -v -e '1/1 "%.2x"' -s $((0x120)) -n 16 /dev/mtd6)
-    uci set system.@system[0].hostname=$HOSTNAME-$(hexdump -v -e '1/1 "%.2x"' -s $((0x120)) -n 3 /dev/mtd6)
+    uci set system.@system[0].hostname=$HOSTNAME-$(hexdump -v -e '1/1 "%.2x"' -s $((0x1005)) -n 3 /dev/mtd6)
 	hostname=`uci get system.@system[0].hostname`
 	echo $hostname > /proc/sys/kernel/hostname
 	uci set network.wan1.hostname=$hostname

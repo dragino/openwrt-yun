@@ -25,7 +25,7 @@ if [ $1 ]; then
 	fi
 fi
 
-VERSION=2.0.5
+VERSION=2.0.6
 BUILD=$APP-$VERSION
 BUILD_TIME="`date`"
 

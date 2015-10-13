@@ -6,6 +6,9 @@ USAGE="Usage: . ./set_up_build_enviroment.sh"
 REPO_PATH=$(pwd)
 OPENWRT_PATH='openwrt'
 
+echo "*** Download Dragino Packages"
+git clone https://github.com/dragino/dragino-packages.git dragino-packages
+
 
 echo "*** Update the feeds, update result please see feed_update.log"
 echo "*** Update process may take several minutes"
