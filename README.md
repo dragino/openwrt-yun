@@ -18,10 +18,11 @@ cd Dragino-Yun
 ./build_image.sh
 ```
 After complination, the images can be found on **Dragino-Yun/image** folder. The folder includes:
-*dragino2-yun-common-vxxx-kernel.bin  kernel files, for upgrade in u-boot
-*dragino2-yun-common-vxxx-rootfs-squashfs.bin    rootfs file, for upgrade in u-boot
-*dragino2-yun-common-vxxx-squashfs-sysupgrade.bin   sysupgrade file, used for web-ui upgrade
-*md5sum  md5sum for above files
+
+* dragino2-yun-common-vxxx-kernel.bin  kernel files, for upgrade in u-boot
+* dragino2-yun-common-vxxx-rootfs-squashfs.bin    rootfs file, for upgrade in u-boot
+* dragino2-yun-common-vxxx-squashfs-sysupgrade.bin   sysupgrade file, used for web-ui upgrade
+* md5sum  md5sum for above files
 
 
 How to debug if build fails?
